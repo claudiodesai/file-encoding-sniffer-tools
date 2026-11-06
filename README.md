@@ -44,3 +44,10 @@ This is a *sniffer*, not a full statistical detector. It exists for the case whe
 - `sniff_file(path: str | os.PathLike, sample_size: int = 1024) -> EncodingGuess`
 - `sniff_bytes(data: bytes | bytearray) -> EncodingGuess`
 - `EncodingGuess` is a frozen dataclass with `encoding: str` and `bom: bool`.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
